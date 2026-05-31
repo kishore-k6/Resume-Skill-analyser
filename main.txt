@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX 100
+
+int main() {
+    char resume[MAX][50], job[MAX][50];
+    int rCount = 0, jCount = 0;
+    int i, j, found;
+
+    FILE *f1 = fopen("resume.txt", "r");
+    FILE *f2 = fopen("job.txt", "r");
+
+    if (f1 == NULL || f2 == NULL) {
+        printf("Error opening file!\n");
+        return 1;
+    }
+
+    // Read resume skills
+    while (fscanf(f1, "%s", resume[rCount]) != EOF) {
+        rCount++;
+    }
+
+    // Read job skills
+    while (fscanf(f2, "%s", job[jCount]) != EOF) {
+        jCount++;
+    }
+
+    printf("\nYour Skills:\n");
+    for (i = 0; i < rCount; i++) {
+        printf("%s ", resume[i]);
+    }
+
+    printf("\n\nRequired Skills:\n");
+    for (i = 0; i < jCount; i++) {
+        printf("%s ", job[i]);
+    }
+
+    printf("\n\nMatched Skills:\n");
+    for (i = 0; i < jCount; i++) {
+        found = 0;
+        for (j = 0; j < rCount; j++) {
+            if (strcmp(job[i], resume[j]) == 0) {
+                printf("%s\n", job[i]);
+                found = 1;
+                break;
+            }
+        }
+    }
+
+    printf("\nMissing Skills:\n");
+    for (i = 0; i < jCount; i++) {
+        found = 0;
+        for (j = 0; j < rCount; j++) {
+            if (strcmp(job[i], resume[j]) == 0) {
+                found = 1;
+                break;
+            }
+        }
+        if (!found) {
+            printf("%s\n", job[i]);
+        }
+    }
+
+    printf("\nSuggestion:\nLearn missing skills to improve job chances!\n");
+
+    fclose(f1);
+    fclose(f2);
+
+    return 0;
+}
